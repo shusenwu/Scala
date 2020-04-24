@@ -28,7 +28,6 @@ trait DatabaseInit {
     SessionFactory.concreteFactory = Some(() => connection)
 
     def connection = {
-      logger.info("Creating connection with c3po connection pool to Mysql")
       Session.create(cpds.getConnection, new MySQLAdapter)
     }
   }
