@@ -1,7 +1,7 @@
 package com.shusen.blog.db
 
-import com.shusen.blog.model.Comment
-import com.shusen.blog.model.DatabaseSchemas.{article, category, comment}
+import com.shusen.blog.model.{Comment, Contact}
+import com.shusen.blog.model.DatabaseSchemas.{article, category, comment, contact}
 import org.squeryl.PrimitiveTypeMode._
 import com.shusen.blog.utils.tools.getCurrentDigitTime
 
@@ -26,6 +26,14 @@ object BlogDao {
     from(article)(a =>
       where(a.category === category)
       select(a)
+        orderBy(a.updateDate desc)
+    ).page(offset, pageLength)
+
+
+  def searchBlogByTitle(offset:Int, pageLength:Int, articleTitle: String) =
+    from(article)(a =>
+      where(a.articleTitle.like("%" + articleTitle + "%"))
+        select(a)
         orderBy(a.updateDate desc)
     ).page(offset, pageLength)
 
@@ -61,8 +69,17 @@ object BlogDao {
       )
   }
 
-  def insertComment(name: String, email: String, content: String, blogId: Int) =
-    comment.insert(new Comment(0, getCurrentDigitTime.toString, name, email, content, blogId))
+  def insertComment(name: String, email: String, content: String, blogId: Long) =
+    transaction{
+      comment.insert(new Comment(0, getCurrentDigitTime.toString, name, email, content, blogId))
+      updateCommentNum(blogId)
+    }
+
+  def insertContact(name: String, email: String, subject: String, message:String) = {
+    val createDate = getCurrentDigitTime.toString
+    contact.insert(new Contact(0, name, email, subject, message, createDate))
+  }
+
 
   def getCommentsByArticleId(articleId:Long) =
     from(comment)(c =>
@@ -70,5 +87,11 @@ object BlogDao {
       select(c) orderBy(c.commentDate)
     )
 
+
+  def updateCommentNum(id: Long) =
+    update(article)(a =>
+    where(a.id === id)
+      set(a.commentNum := a.commentNum.~ + 1)
+    )
 
 }
