@@ -7,7 +7,7 @@ import org.squeryl.SessionFactory
 import org.slf4j.LoggerFactory
 
 trait DatabaseInit {
-  val logger = LoggerFactory.getLogger(getClass)
+  val LOG = LoggerFactory.getLogger(getClass)
 
   val databaseUsername = "root"
   val databasePassword = "mima543"
@@ -33,7 +33,7 @@ trait DatabaseInit {
   }
 
   def closeDbConnection() {
-    logger.info("Closing c3po connection pool")
+    LOG.info("Closing c3po connection pool")
     cpds.close()
   }
 }

@@ -5,7 +5,6 @@ import org.scalatra.scalate.ScalateSupport
 import com.shusen.blog.db.BlogDao
 import com.shusen.blog.db.DatabaseSessionSupport
 
-
 class IndexServlet extends ScalatraServlet with ScalateSupport with DatabaseSessionSupport {
   val pageLength = 5
   val categories = BlogDao.getCategories  // Constructor
@@ -18,7 +17,6 @@ class IndexServlet extends ScalatraServlet with ScalateSupport with DatabaseSess
     BlogDao.insertContact(name, email, subject, message)
     redirect("/")
   }
-
 
   post("/comment") {
     val name = params("name")
@@ -46,11 +44,8 @@ class IndexServlet extends ScalatraServlet with ScalateSupport with DatabaseSess
     val curPath = params("category")
     curPath match {
       case "home" => redirect("/?page=" + page)
-      case "contact"| "about"=>
-        ssp("/"+curPath, "categories" -> categories, "curPath" -> curPath)
-      case _ =>
-        getSSP(curPath, page)
-
+      case "contact"| "about"=> ssp("/"+curPath, "categories" -> categories, "curPath" -> curPath)
+      case _ => getSSP(curPath, page)
     }
   }
 
@@ -84,11 +79,8 @@ class IndexServlet extends ScalatraServlet with ScalateSupport with DatabaseSess
     case "home" => BlogDao.searchForAllBlogs((page - 1) * pageLength, pageLength)
     case "search" =>
       val title = params.getOrElse("title", "")
-      println("==================")
-      println(title)
       BlogDao.searchBlogByTitle((page - 1) * pageLength, pageLength, title)
     case _ => BlogDao.searchBlogByCate((page - 1) * pageLength, pageLength, curPath.capitalize)
   }
-
 
 }

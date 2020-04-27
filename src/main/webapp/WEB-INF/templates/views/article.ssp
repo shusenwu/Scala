@@ -1,6 +1,7 @@
 <% import com.shusen.blog.model.CateGory %>
 <% import com.shusen.blog.model.Article %>
 <% import com.shusen.blog.model.Comment %>
+<% import com.shusen.blog.utils.tools.randon1t4 %>
 <% import org.squeryl.Query %>
 <% import org.squeryl.dsl.GroupWithMeasures %>
 <% import com.shusen.blog.utils.tools.convertTimeFromDigitToString %>
@@ -9,6 +10,7 @@
 <%@ val rightCategories:Query[GroupWithMeasures[String, Long]]%>
 <%@ val topBlogs:Query[Article]%>
 <%@ val comments:Query[Comment]%>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -91,7 +93,7 @@
 
 
 		            <div class="pt-5 mt-5">
-		              <h3 class="mb-5 font-weight-bold">6 Comments</h3>
+		              <h3 class="mb-5 font-weight-bold"><%= comments.size %> Comments</h3>
 		              <ul class="comment-list">
 <div class="about-author d-flex p-4 bg-light">
 	<div class="bio mr-5">
@@ -106,7 +108,7 @@
 	#for(comment <- comments.toList)
 <li class="comment">
 	<div class="vcard bio">
-		<img src="/images/person_1.jpg" alt="Image placeholder">
+		<img src="/images/person_<%= randon1t4 %>.jpg" alt="Image placeholder">
 		</div>
 		<div class="comment-body">
 			<h3><%= comment.name %></h3>
