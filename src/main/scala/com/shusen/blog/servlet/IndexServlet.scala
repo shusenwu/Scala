@@ -4,9 +4,10 @@ import org.scalatra.ScalatraServlet
 import org.scalatra.scalate.ScalateSupport
 import com.shusen.blog.db.BlogDao
 import com.shusen.blog.db.DatabaseSessionSupport
+import com.shusen.blog.BlogSettings.pageLength
 
 class IndexServlet extends ScalatraServlet with ScalateSupport with DatabaseSessionSupport {
-  val pageLength = 5
+
   val categories = BlogDao.getCategories  // Constructor
 
   post("/contact") {

@@ -5,13 +5,10 @@ import org.squeryl.adapters.MySQLAdapter
 import org.squeryl.Session
 import org.squeryl.SessionFactory
 import org.slf4j.LoggerFactory
+import com.shusen.blog.BlogSettings.{databaseUsername, databasePassword, databaseConnection}
 
 trait DatabaseInit {
   val LOG = LoggerFactory.getLogger(getClass)
-
-  val databaseUsername = "root"
-  val databasePassword = "mima543"
-  val databaseConnection = "jdbc:mysql://localhost:8847/scalablog"
 
   var cpds = new ComboPooledDataSource
 
